@@ -3,16 +3,33 @@ package com.example.books.entity;
 import com.fasterxml.jackson.annotation.*;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "book")
 @ApiModel(description = "Все подробности о книге")
-@JsonIdentityInfo(generator= ObjectIdGenerators.IntSequenceGenerator.class)
+@JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class)
 public class Books {
+    public Books() {
+    }
+
+    public Books(String name, String annotation, Date publishedAt,
+                 int years, List<Author> authorList, Orders ordersList) {
+        this.name = name;
+        this.annotation = annotation;
+        this.publishedAt = publishedAt;
+        this.years = years;
+        this.authorList = authorList;
+        this.ordersList = ordersList;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
@@ -20,11 +37,15 @@ public class Books {
     @ApiModelProperty("Название книги")
     @Column(name = "name")
     private String name;
+    @ApiModelProperty("Аннотации")
+    @Column(name = "annotation")
+    private String annotation;
+    @Column(name = "published_at")
+    private Date publishedAt;
     @ApiModelProperty("Год издания")
     @Column(name = "years")
     private int years;
 
-    @JsonIgnoreProperties("book")
     @ManyToMany(fetch = FetchType.LAZY,
             cascade = {CascadeType.ALL}
     )
@@ -33,20 +54,15 @@ public class Books {
             joinColumns = @JoinColumn(name = "books_id"),
             inverseJoinColumns = @JoinColumn(name = "author_id")
     )
-//    @JsonManagedReference
-    List<Author> authorList;
-    @JsonIgnoreProperties("books")
-    @ManyToMany(fetch = FetchType.LAZY,
-            cascade = {CascadeType.ALL}
+    private List<Author> authorList;
+    @NotFound(
+            action = NotFoundAction.IGNORE)
+    @ManyToOne(
+            fetch = FetchType.LAZY
     )
-    @JoinTable(
-            name = "orders_books",
-            joinColumns = @JoinColumn(name = "books_id"),
-            inverseJoinColumns = @JoinColumn(name = "orders_id")
-    )
-    List<Orders> ordersList;
+    private Orders ordersList;
 
-    public Long getId() {
+    public Long getId(Long bookId) {
         return Id;
     }
 
@@ -80,7 +96,8 @@ public class Books {
 
     public void addAuthors(Author author) {
         if (authorList == null) {
-            authorList = new ArrayList<>();
+            authorList = new ArrayList() {
+            };
             authorList.add(author);
         }
     }
@@ -88,5 +105,29 @@ public class Books {
     public void removeAuthors(Author author) {
         getAuthorList().remove(author);
         author.setBooksList(null);
+    }
+
+    public void setOrdersList(Orders ordersList) {
+        this.ordersList = ordersList;
+    }
+
+    public Orders getOrdersList() {
+        return ordersList;
+    }
+
+    public String getAnnotation() {
+        return annotation;
+    }
+
+    public void setAnnotation(String annotation) {
+        this.annotation = annotation;
+    }
+
+    public Date getPublishedAt() {
+        return publishedAt;
+    }
+
+    public void setPublishedAt(Date publishedAt) {
+        this.publishedAt = publishedAt;
     }
 }

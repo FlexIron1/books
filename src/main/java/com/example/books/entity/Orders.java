@@ -7,13 +7,17 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 
 @Entity
 @Table(name = "orders")
 @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class)
 public class Orders {
+    public Orders() {
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -21,41 +25,35 @@ public class Orders {
     @Column(name = "name")
     String name;
     @Column(name = "Order_Creation_Date")
-    private int Order_Creation_Date;
+    private Date Order_Creation_Date;
     @Column(name = "Order_Execution_Date")
-    private int Order_Execution_Date;
+    private Date Order_Execution_Date;
     @Column(name = "Order_Execution_Flag")
     private Boolean OrderExecutionFlag;
 
-//    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-//    @JoinColumn(name = "client_id")
-//    private Client client;
-  @JsonIgnoreProperties("orders")
-    @ManyToMany(fetch = FetchType.LAZY,
-            cascade = {CascadeType.ALL}
-    )
-    @JoinTable(
-            name = "orders_client",
-            joinColumns = @JoinColumn(name = "orders_id"),
-            inverseJoinColumns = @JoinColumn(name = "clients_id")
-    )
-    List<Client> clientList;
+    {
+        OrderExecutionFlag = false;
+    }
 
-//    @JsonIgnoreProperties("books")
-    @ManyToMany(fetch = FetchType.LAZY,
-            cascade = {CascadeType.ALL}
-    )
-    @JoinTable(
-            name = "orders_books",
-            joinColumns = @JoinColumn(name = "orders_id"),
-            inverseJoinColumns = @JoinColumn(name = "books_id")
-    )
-   // @ManyToMany(mappedBy = "ordersList",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
-    List<Books> booksList;
+    @OneToMany( mappedBy = "orders",fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Set<Client> clients;
+
+    @OneToMany( mappedBy = "ordersList",fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Set<Books> books;
 
 
-    public Long getId(long id) {
-        return this.id;
+    public Orders(String name, Date order_Creation_Date, Date order_Execution_Date,
+                  Boolean orderExecutionFlag, Set<Client> clients, Set<Books> books) {
+        this.name = name;
+        Order_Creation_Date = order_Creation_Date;
+        Order_Execution_Date = order_Execution_Date;
+        OrderExecutionFlag = orderExecutionFlag;
+        this.clients = clients;
+        this.books = books;
+    }
+
+    public Long getId() {
+        return id;
     }
 
     public void setId(Long id) {
@@ -69,22 +67,22 @@ public class Orders {
     public void setName(String name) {
         this.name = name;
     }
+//
+//    public int getOrder_Creation_Date() {
+//        return Order_Creation_Date;
+//    }
 
-    public int getOrder_Creation_Date() {
-        return Order_Creation_Date;
-    }
+//    public void setOrder_Creation_Date(int order_Creation_Date) {
+//        Order_Creation_Date = order_Creation_Date;
+//    }
 
-    public void setOrder_Creation_Date(int order_Creation_Date) {
-        Order_Creation_Date = order_Creation_Date;
-    }
-
-    public int getOrder_Execution_Date() {
-        return Order_Execution_Date;
-    }
-
-    public void setOrder_Execution_Date(int order_Execution_Date) {
-        Order_Execution_Date = order_Execution_Date;
-    }
+//    public int getOrder_Execution_Date() {
+//        return Order_Execution_Date;
+//    }
+//
+//    public void setOrder_Execution_Date(int order_Execution_Date) {
+//        Order_Execution_Date = order_Execution_Date;
+//    }
 
     public Boolean getOrderExecutionFlag() {
         return OrderExecutionFlag;
@@ -93,41 +91,37 @@ public class Orders {
     public void setOrderExecutionFlag(Boolean orderExecutionFlag) {
         OrderExecutionFlag = orderExecutionFlag;
     }
-//
-//    public List<Client> getClientList() {
-//        return clientList;
-//    }
-//
-//    public void setClientList(List<Client> clientList) {
-//        this.clientList = clientList;
-//    }
 
-//    public Client getClient() {
-//        return client;
-//    }
-//
-//    public void setClient(Client client) {
-//        this.client = client;
-//    }
-
-    public List<Books> getBooksList() {
-        return booksList;
+    public Set<Client> getClients() {
+        return clients;
     }
 
-    public void setBooksList(List<Books> booksList) {
-        this.booksList = booksList;
+    public void setClients(Set<Client> clients) {
+        this.clients = clients;
     }
 
-    public Long getId() {
-        return id;
+    public Set<Books> getBooks() {
+        return books;
     }
 
-    public List<Client> getClientList() {
-        return clientList;
+    public void setBooks(Set<Books> books) {
+        this.books = books;
     }
 
-    public void setClientList(List<Client> clientList) {
-        this.clientList = clientList;
+    public Date getOrder_Creation_Date() {
+        return Order_Creation_Date;
+    }
+
+    public void setOrder_Creation_Date(Date order_Creation_Date) {
+        Order_Creation_Date = order_Creation_Date;
+    }
+
+    public Date getOrder_Execution_Date() {
+        return Order_Execution_Date;
+    }
+
+    public void setOrder_Execution_Date(Date order_Execution_Date) {
+        Order_Execution_Date = order_Execution_Date;
     }
 }
 

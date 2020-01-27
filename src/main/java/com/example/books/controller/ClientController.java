@@ -3,7 +3,10 @@ package com.example.books.controller;
 
 import com.example.books.entity.Client;
 import com.example.books.repository.ClientRepository;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,14 +14,24 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/client")
+@Api(value = "Клиенты ",description = "Клиенты")
 public class ClientController {
+
     @Autowired
     private ClientRepository clientRepository;
-
-    @ApiOperation(value = "Добавить нового автора , новой книги", response = Client.class)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200,
+                    message = "Список успешно найден"),
+            @ApiResponse(code = 401,
+                    message = "Вы не авторизованы для просмотра ресурса"),
+            @ApiResponse(code = 403,
+                    message = "Доступ к ресурсу, который вы пытались получить, запрещен"),
+            @ApiResponse(code = 404,
+                    message = "Ресурс, который вы пытались получить, не найден")
+    })
+    @ApiOperation(value = "Добавить нового клиента", response = Client.class)
     @PostMapping("/add")
     public Client addClient(@RequestBody Client client) {
-
         return clientRepository.save(client);
     }
 
@@ -36,7 +49,7 @@ public class ClientController {
 
     @ApiOperation(value = "Обновить информацию о клиенте", response = Client.class)
     @PutMapping("/{id}")
-    public Client updateClients(@RequestBody Client client,@PathVariable Long id) {
+    public Client updateClients(@RequestBody Client client, @PathVariable Long id) {
         client.setId(id);
         return clientRepository.save(client);
     }

@@ -3,9 +3,7 @@ package com.example.books.controller;
 
 import com.example.books.entity.Author;
 import com.example.books.repository.AuthorRepository;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,10 +17,19 @@ import java.util.Optional;
 public class AuthorController {
     @Autowired
     AuthorRepository authorRepository;
-
+    @ApiResponses(value = {
+            @ApiResponse(code = 200,
+                    message = "Список успешно найден"),
+            @ApiResponse(code = 401,
+                    message = "Вы не авторизованы для просмотра ресурса"),
+            @ApiResponse(code = 403,
+                    message = "Доступ к ресурсу, который вы пытались получить, запрещен"),
+            @ApiResponse(code = 404,
+                    message = "Ресурс, который вы пытались получить, не найден")
+    })
     @ApiOperation( value  =  "Добавить нового автора , новой книги",response = Author.class)
     @PostMapping("/add")
-    public Author addAuthors(@RequestBody Author author) {
+    private Author addAuthors(@RequestBody Author author) {
 
         return authorRepository.save(author);
     }

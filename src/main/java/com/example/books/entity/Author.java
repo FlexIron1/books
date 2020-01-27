@@ -7,6 +7,7 @@ import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiOperation;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,7 +16,17 @@ import java.util.List;
 
 @ApiModel(description = "Все подробности об авторе")
 @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class)
-public class Author {
+public class Author implements Serializable {
+    public Author() {
+    }
+
+    public Author(String name, String firstName, int years, List<Books> booksList) {
+        this.name = name;
+        this.firstName = firstName;
+        this.years = years;
+        this.booksList = booksList;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
@@ -96,5 +107,6 @@ public class Author {
             books.setAuthorList(null);
         }
     }
+
 
 }

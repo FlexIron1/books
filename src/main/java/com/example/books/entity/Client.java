@@ -2,16 +2,25 @@ package com.example.books.entity;
 
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
 
 import javax.persistence.*;
-import java.util.List;
 
 @Entity
 @Table(name = "client")
 @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class)
 public class Client {
+    public Client() {
+    }
+
+    public Client(Long id, int number, Orders orders) {
+        this.id = id;
+        this.number = number;
+        this.orders = orders;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -20,22 +29,13 @@ public class Client {
     @Column(name = "phone_number")
     private int number;
 
+    @NotFound(
+            action = NotFoundAction.IGNORE)
+    @ManyToOne()
+    @JoinColumn(name = "id_orders")
+    private Orders orders;
 
-    @JsonIgnoreProperties("client")
-    @ManyToMany(fetch = FetchType.LAZY,
-            cascade = {CascadeType.ALL}
-    )
-    @JoinTable(
-            name = "client_orders",
-            joinColumns = @JoinColumn(name = "client_id"),
-            inverseJoinColumns = @JoinColumn(name = "orders_id")
-    )
-//    @OneToMany(mappedBy = "client",fetch = FetchType.LAZY,
-//            cascade = CascadeType.ALL)
-    List<Orders> ordersList;
-
-
-    public Long getId() {
+    public Long getId(Long clientId) {
         return id;
     }
 
@@ -59,12 +59,12 @@ public class Client {
         this.number = number;
     }
 
-    public List<Orders> getOrdersList() {
-        return ordersList;
+    public Orders getOrders() {
+        return orders;
     }
 
-    public void setOrdersList(List<Orders> ordersList) {
-        this.ordersList = ordersList;
+    public void setOrders(Orders orders) {
+        this.orders = orders;
     }
 
 }
