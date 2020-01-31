@@ -1,7 +1,6 @@
 package com.example.books.controller;
 
-
-import com.example.books.entity.Books;
+import com.example.books.model.Books;
 import com.example.books.repository.BooksRepository;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;

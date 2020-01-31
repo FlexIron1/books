@@ -1,4 +1,4 @@
-package com.example.books.entity;
+package com.example.books.model;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
@@ -6,9 +6,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import org.hibernate.annotations.NotFound;
 import org.hibernate.annotations.NotFoundAction;
-
 import javax.persistence.*;
-import java.io.Serializable;
 import java.util.Date;
 import java.util.Set;
 
@@ -16,8 +14,7 @@ import java.util.Set;
 @Table(name = "book")
 @ApiModel(description = "Все подробности о книге")
 @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class)
-public class Books implements Serializable {
-
+public class Books {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -47,7 +44,6 @@ public class Books implements Serializable {
     public Long getId(Long bookId) {
         return Id;
     }
-
     public void setId(Long id) {
         Id = id;
     }
@@ -76,7 +72,6 @@ public class Books implements Serializable {
         this.authorList = authorList;
     }
 
-
     public String getAnnotation() {
         return annotation;
     }
@@ -100,7 +95,6 @@ public class Books implements Serializable {
     public Orders getOrders() {
         return orders;
     }
-
     public void setOrders(Orders orders) {
         this.orders = orders;
     }

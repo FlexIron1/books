@@ -1,13 +1,12 @@
-package com.example.books.entity;
-
+package com.example.books.model;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+
 import javax.persistence.*;
-import java.io.Serializable;
 import java.util.Set;
 
 @Entity
@@ -15,10 +14,7 @@ import java.util.Set;
 
 @ApiModel(description = "Все подробности об авторе")
 @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class)
-public class Author implements Serializable {
-
-
-
+public class Author {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

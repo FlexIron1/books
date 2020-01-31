@@ -1,6 +1,6 @@
 package com.example.books.controller;
 
-import com.example.books.entity.Orders;
+import com.example.books.model.Orders;
 import com.example.books.repository.OrdersRepository;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -64,7 +64,7 @@ public class OrdersController {
     @ApiOperation(value = "Выполнить заказ", response = void.class)
     public Orders executeOrder(@RequestBody Orders orders,@PathVariable("id") long id) throws ResourceNotFoundException {
         orders.setId(id);
-        orders.setOrderExecutionFlag(false);
+        orders.setOrderExecutionFlag(true);
         orders.setOrder_Execution_Date(new Date());
       return ordersRepository.save(orders);
     }

@@ -1,7 +1,6 @@
 package com.example.books.controller;
 
-
-import com.example.books.entity.Author;
+import com.example.books.model.Author;
 import com.example.books.repository.AuthorRepository;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -34,7 +33,6 @@ public class AuthorController {
     @ApiOperation(value = "Добавить нового автора , новой книги", response = Author.class)
     @PostMapping("/add")
     private Author addAuthors(@RequestBody Author author) {
-
         return authorRepository.save(author);
     }
 
@@ -55,7 +53,6 @@ public class AuthorController {
     public void deleteAuthors(@PathVariable("id") long id) {
         authorRepository.deleteById(id);
     }
-
 
 }
 

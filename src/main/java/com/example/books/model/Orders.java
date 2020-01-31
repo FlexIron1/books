@@ -1,7 +1,8 @@
-package com.example.books.entity;
+package com.example.books.model;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import io.swagger.annotations.ApiModel;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -10,11 +11,9 @@ import java.util.Set;
 
 @Entity
 @Table(name = "orders")
+@ApiModel(description = "Заказы")
 @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class)
 public class Orders {
-
-
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -34,7 +33,7 @@ public class Orders {
 
     public Orders() {
     }
-    
+
     public Long getId() {
         return id;
     }
@@ -68,21 +67,6 @@ public class Orders {
         this.clients = clients;
     }
 
-//    public Set<Books> getBooks() {
-//        return books;
-//    }
-//
-//    public void setBooks(Set<Books> books) {
-//        this.books = books;
-//    }
-//    public Client getClients() {
-//        return clients;
-//    }
-//
-//    public void setClients(Client clients) {
-//        this.clients = clients;
-//    }
-
     public Set<Books> getBooks() {
         return books;
     }
@@ -108,7 +92,7 @@ public class Orders {
     }
 
     public void orderExecution(long id) {
-setId(id);
+        setId(id);
         setOrderExecutionFlag(true);
 
     }

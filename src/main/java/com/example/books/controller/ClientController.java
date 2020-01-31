@@ -1,7 +1,7 @@
 package com.example.books.controller;
 
 
-import com.example.books.entity.Client;
+import com.example.books.model.Client;
 import com.example.books.repository.ClientRepository;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;

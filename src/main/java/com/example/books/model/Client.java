@@ -1,8 +1,9 @@
-package com.example.books.entity;
+package com.example.books.model;
 
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import io.swagger.annotations.ApiModel;
 import org.hibernate.annotations.NotFound;
 import org.hibernate.annotations.NotFoundAction;
 
@@ -10,6 +11,7 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "client")
+@ApiModel(description = "Клиент")
 @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class)
 public class Client {
 
@@ -29,7 +31,6 @@ public class Client {
 
     public Client() {
     }
-
 
     public Long getId(Long clientId) {
         return id;
@@ -63,8 +64,6 @@ public class Client {
         this.orders = orders;
     }
 
-    public Long getId() {
-        return id;
-    }
+
 }
 
