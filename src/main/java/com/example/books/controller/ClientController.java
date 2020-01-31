@@ -14,7 +14,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/client")
-@Api(value = "Клиенты ",description = "Клиенты")
+@Api(value = "Клиенты ", description = "Клиенты")
 public class ClientController {
 
     @Autowired

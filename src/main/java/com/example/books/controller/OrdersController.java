@@ -1,8 +1,8 @@
 package com.example.books.controller;
 
-import com.example.books.entity.Author;
 import com.example.books.entity.Orders;
 import com.example.books.repository.OrdersRepository;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
@@ -10,12 +10,14 @@ import org.elasticsearch.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.Optional;
 
 @RestController
 @RequestMapping("/orders")
+@Api(value = "Заказы ", description = "Заказы клиентов")
 public class OrdersController {
-    Orders orders;
+
     @Autowired
     private OrdersRepository ordersRepository;
 
@@ -39,7 +41,9 @@ public class OrdersController {
     @ApiOperation(value = "Добавить новый заказ", response = Orders.class)
     @PostMapping("/add")
     public Orders addOrders(@RequestBody Orders orders) {
-orders.setOrderExecutionFlag(false);
+        orders.setOrderExecutionFlag(false);
+        orders.setOrder_Execution_Date(null);
+
         return ordersRepository.save(orders);
     }
 
@@ -49,14 +53,7 @@ orders.setOrderExecutionFlag(false);
         return ordersRepository.findById(id);
     }
 
-//    @ApiOperation(value = "Обновить информацию о заказе", response = Orders.class)
-//    @PutMapping("/{id}")
-//    public Orders updateAuthors(@RequestBody Orders orders, @PathVariable("id") long id) {
-//        orders.setId(id);
-//        return ordersRepository.save(orders);
-//    }
 
-    // delete course from database
     @ApiOperation(value = "Отменить заказ по уникальному ключу", response = void.class)
     @DeleteMapping("/{id}")
     public void deleteOrders(@PathVariable("id") long id) {
@@ -66,9 +63,9 @@ orders.setOrderExecutionFlag(false);
     @PutMapping("/{id}")
     @ApiOperation(value = "Выполнить заказ", response = void.class)
     public Orders executeOrder(@RequestBody Orders orders,@PathVariable("id") long id) throws ResourceNotFoundException {
-
-      orders.setId(id);
-      orders.setOrderExecutionFlag(true);
+        orders.setId(id);
+        orders.setOrderExecutionFlag(false);
+        orders.setOrder_Execution_Date(new Date());
       return ordersRepository.save(orders);
     }
 }

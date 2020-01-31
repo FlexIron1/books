@@ -1,16 +1,14 @@
 package com.example.books.entity;
 
-import com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import org.hibernate.annotations.NotFound;
-import org.hibernate.annotations.NotFoundAction;
 
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
 
 @Entity
 @Table(name = "book")
@@ -27,7 +25,6 @@ public class Books {
         this.publishedAt = publishedAt;
         this.years = years;
         this.authorList = authorList;
-        this.ordersList = ordersList;
     }
 
     @Id
@@ -55,12 +52,6 @@ public class Books {
             inverseJoinColumns = @JoinColumn(name = "author_id")
     )
     private List<Author> authorList;
-    @NotFound(
-            action = NotFoundAction.IGNORE)
-    @ManyToOne(
-            fetch = FetchType.LAZY
-    )
-    private Orders ordersList;
 
     public Long getId(Long bookId) {
         return Id;
@@ -94,26 +85,6 @@ public class Books {
         this.authorList = authorList;
     }
 
-    public void addAuthors(Author author) {
-        if (authorList == null) {
-            authorList = new ArrayList() {
-            };
-            authorList.add(author);
-        }
-    }
-
-    public void removeAuthors(Author author) {
-        getAuthorList().remove(author);
-        author.setBooksList(null);
-    }
-
-    public void setOrdersList(Orders ordersList) {
-        this.ordersList = ordersList;
-    }
-
-    public Orders getOrdersList() {
-        return ordersList;
-    }
 
     public String getAnnotation() {
         return annotation;
@@ -129,5 +100,9 @@ public class Books {
 
     public void setPublishedAt(Date publishedAt) {
         this.publishedAt = publishedAt;
+    }
+
+    public Long getId() {
+        return Id;
     }
 }

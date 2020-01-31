@@ -1,14 +1,13 @@
 package com.example.books.entity;
 
 
-import com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import io.swagger.annotations.ApiOperation;
-
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -51,7 +50,6 @@ public class Author implements Serializable {
     )
 
     private List<Books> booksList;
-//  @JsonBackReference
 
 
     public Long getId() {
@@ -90,22 +88,8 @@ public class Author implements Serializable {
         return booksList;
     }
 
-    public void setBooksList(List<Books> booksList) {
+     void setBooksList(List<Books> booksList) {
         this.booksList = booksList;
-    }
-
-    public void addBooks(Books books) {
-        if (booksList == null) {
-            booksList = new ArrayList<>();
-            booksList.add(books);
-        }
-    }
-
-    public void removeBooks(Books books) {
-        if (booksList != null) {
-            getBooksList().remove(books);
-            books.setAuthorList(null);
-        }
     }
 
 

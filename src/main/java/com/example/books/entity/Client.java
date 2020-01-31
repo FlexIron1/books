@@ -7,6 +7,7 @@ import org.hibernate.annotations.NotFound;
 import org.hibernate.annotations.NotFoundAction;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 @Table(name = "client")
@@ -14,26 +15,23 @@ import javax.persistence.*;
 public class Client {
     public Client() {
     }
-
-    public Client(Long id, int number, Orders orders) {
+    public Client(Long id, int number, Set<Orders> orders) {
         this.id = id;
         this.number = number;
         this.orders = orders;
     }
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     @Column(name = "name")
-    String name;
+    private String name;
     @Column(name = "phone_number")
     private int number;
-
     @NotFound(
             action = NotFoundAction.IGNORE)
-    @ManyToOne()
+    @OneToMany(fetch = FetchType.LAZY,cascade = {CascadeType.ALL})
     @JoinColumn(name = "id_orders")
-    private Orders orders;
+    private Set<Orders> orders;
 
     public Long getId(Long clientId) {
         return id;
@@ -59,13 +57,16 @@ public class Client {
         this.number = number;
     }
 
-    public Orders getOrders() {
+    public Set<Orders> getOrders() {
         return orders;
     }
 
-    public void setOrders(Orders orders) {
+    public void setOrders(Set<Orders> orders) {
         this.orders = orders;
     }
 
+    public Long getId() {
+        return id;
+    }
 }
 

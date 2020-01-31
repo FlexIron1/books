@@ -5,7 +5,6 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import javax.persistence.*;
 import java.util.Date;
-import java.util.Set;
 
 
 @Entity
@@ -20,20 +19,17 @@ public class Orders {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     @Column(name = "name")
-    String name;
+    private String name;
     @Column(name = "Order_Creation_Date")
     private Date Order_Creation_Date;
     @Column(name = "Order_Execution_Date")
     private Date Order_Execution_Date;
     @Column(name = "Order_Execution_Flag")
     private Boolean OrderExecutionFlag;
-
-    @OneToMany(mappedBy = "orders", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private Set<Client> clients;
-
-    @OneToMany(mappedBy = "ordersList", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private Set<Books> books;
-
+    @ManyToOne( fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private Client clients;
+    @ManyToOne( fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Books books;
 
     public Long getId() {
         return id;
@@ -60,19 +56,19 @@ public class Orders {
         OrderExecutionFlag = orderExecutionFlag;
     }
 
-    public Set<Client> getClients() {
+    public Client getClients() {
         return clients;
     }
 
-    public void setClients(Set<Client> clients) {
+    public void setClients(Client clients) {
         this.clients = clients;
     }
 
-    public Set<Books> getBooks() {
+    public Books getBooks() {
         return books;
     }
 
-    public void setBooks(Set<Books> books) {
+    public void setBooks(Books books) {
         this.books = books;
     }
 
