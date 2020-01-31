@@ -4,28 +4,20 @@ import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
 
 import javax.persistence.*;
-import java.util.ArrayList;
+import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "book")
 @ApiModel(description = "Все подробности о книге")
 @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class)
-public class Books {
-    public Books() {
-    }
+public class Books implements Serializable {
 
-    public Books(String name, String annotation, Date publishedAt,
-                 int years, List<Author> authorList, Orders ordersList) {
-        this.name = name;
-        this.annotation = annotation;
-        this.publishedAt = publishedAt;
-        this.years = years;
-        this.authorList = authorList;
-    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -42,16 +34,15 @@ public class Books {
     @ApiModelProperty("Год издания")
     @Column(name = "years")
     private int years;
+    @ManyToMany(mappedBy = "booksList")
+    private Set<Author> authorList;
 
-    @ManyToMany(fetch = FetchType.LAZY,
-            cascade = {CascadeType.ALL}
-    )
-    @JoinTable(
-            name = "books_authors",
-            joinColumns = @JoinColumn(name = "books_id"),
-            inverseJoinColumns = @JoinColumn(name = "author_id")
-    )
-    private List<Author> authorList;
+    @NotFound(action = NotFoundAction.IGNORE)
+    @ManyToOne()
+    private Orders orders;
+
+    public Books() {
+    }
 
     public Long getId(Long bookId) {
         return Id;
@@ -77,11 +68,11 @@ public class Books {
         this.years = years;
     }
 
-    public List<Author> getAuthorList() {
+    public Set<Author> getAuthorList() {
         return authorList;
     }
 
-    public void setAuthorList(List<Author> authorList) {
+    public void setAuthorList(Set<Author> authorList) {
         this.authorList = authorList;
     }
 
@@ -104,5 +95,13 @@ public class Books {
 
     public Long getId() {
         return Id;
+    }
+
+    public Orders getOrders() {
+        return orders;
+    }
+
+    public void setOrders(Orders orders) {
+        this.orders = orders;
     }
 }

@@ -7,19 +7,12 @@ import org.hibernate.annotations.NotFound;
 import org.hibernate.annotations.NotFoundAction;
 
 import javax.persistence.*;
-import java.util.Set;
 
 @Entity
 @Table(name = "client")
 @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class)
 public class Client {
-    public Client() {
-    }
-    public Client(Long id, int number, Set<Orders> orders) {
-        this.id = id;
-        this.number = number;
-        this.orders = orders;
-    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -27,11 +20,16 @@ public class Client {
     private String name;
     @Column(name = "phone_number")
     private int number;
+
     @NotFound(
             action = NotFoundAction.IGNORE)
-    @OneToMany(fetch = FetchType.LAZY,cascade = {CascadeType.ALL})
+    @ManyToOne()
     @JoinColumn(name = "id_orders")
-    private Set<Orders> orders;
+    private Orders orders;
+
+    public Client() {
+    }
+
 
     public Long getId(Long clientId) {
         return id;
@@ -57,11 +55,11 @@ public class Client {
         this.number = number;
     }
 
-    public Set<Orders> getOrders() {
+    public Orders getOrders() {
         return orders;
     }
 
-    public void setOrders(Set<Orders> orders) {
+    public void setOrders(Orders orders) {
         this.orders = orders;
     }
 

@@ -8,7 +8,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "Author")
@@ -16,15 +16,9 @@ import java.util.List;
 @ApiModel(description = "Все подробности об авторе")
 @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class)
 public class Author implements Serializable {
-    public Author() {
-    }
 
-    public Author(String name, String firstName, int years, List<Books> booksList) {
-        this.name = name;
-        this.firstName = firstName;
-        this.years = years;
-        this.booksList = booksList;
-    }
+
+
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -42,14 +36,16 @@ public class Author implements Serializable {
     private int years;
 
     @JsonIgnoreProperties("Authors")
-    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.ALL}
+    @ManyToMany( cascade = {CascadeType.ALL}
     )
     @JoinTable(name = "authors_books",
-            joinColumns = @JoinColumn(name = "books_id"),
-            inverseJoinColumns = @JoinColumn(name = "author_id")
+            joinColumns = @JoinColumn(name = "author_id"),
+            inverseJoinColumns = @JoinColumn(name = "books_id")
     )
+    private Set<Books> booksList;
 
-    private List<Books> booksList;
+    public Author() {
+    }
 
 
     public Long getId() {
@@ -84,11 +80,11 @@ public class Author implements Serializable {
         this.years = years;
     }
 
-    public List<Books> getBooksList() {
+    public Set<Books> getBooksList() {
         return booksList;
     }
 
-     void setBooksList(List<Books> booksList) {
+     void setBooksList(Set<Books> booksList) {
         this.booksList = booksList;
     }
 
