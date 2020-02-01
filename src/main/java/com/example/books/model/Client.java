@@ -4,16 +4,15 @@ package com.example.books.model;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import io.swagger.annotations.ApiModel;
-import org.hibernate.annotations.NotFound;
-import org.hibernate.annotations.NotFoundAction;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity
 @Table(name = "client")
 @ApiModel(description = "Клиент")
 @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class)
-public class Client {
+public class Client implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -23,14 +22,12 @@ public class Client {
     @Column(name = "phone_number")
     private int number;
 
-    @NotFound(
-            action = NotFoundAction.IGNORE)
-    @ManyToOne()
-    @JoinColumn(name = "id_orders")
+    @ManyToOne(cascade = CascadeType.ALL)
     private Orders orders;
 
     public Client() {
     }
+
 
     public Long getId(Long clientId) {
         return id;
@@ -64,6 +61,8 @@ public class Client {
         this.orders = orders;
     }
 
-
+    public Long getId() {
+        return id;
+    }
 }
 

@@ -1,10 +1,13 @@
 package com.example.books.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import io.swagger.annotations.ApiModel;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Date;
 import java.util.Set;
 
@@ -13,7 +16,7 @@ import java.util.Set;
 @Table(name = "orders")
 @ApiModel(description = "Заказы")
 @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class)
-public class Orders {
+public class Orders implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -25,14 +28,15 @@ public class Orders {
     private Date Order_Execution_Date;
     @Column(name = "Order_Execution_Flag")
     private Boolean OrderExecutionFlag;
-
-    @OneToMany(mappedBy = "orders", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    private Set<Client> clients;
-    @OneToMany(mappedBy = "orders", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    private Set<Books> books;
+    
+    @ManyToOne(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
+    private  Client clients;
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private Books books;
 
     public Orders() {
     }
+
 
     public Long getId() {
         return id;
@@ -50,31 +54,6 @@ public class Orders {
         this.name = name;
     }
 
-    public Boolean getOrderExecutionFlag() {
-        return OrderExecutionFlag;
-    }
-
-    public void setOrderExecutionFlag(Boolean orderExecutionFlag)
-    {
-        OrderExecutionFlag = orderExecutionFlag;
-    }
-
-    public Set<Client> getClients() {
-        return clients;
-    }
-
-    public void setClients(Set<Client> clients) {
-        this.clients = clients;
-    }
-
-    public Set<Books> getBooks() {
-        return books;
-    }
-
-    public void setBooks(Set<Books> books) {
-        this.books = books;
-    }
-
     public Date getOrder_Creation_Date() {
         return Order_Creation_Date;
     }
@@ -85,6 +64,30 @@ public class Orders {
 
     public Date getOrder_Execution_Date() {
         return Order_Execution_Date;
+    }
+
+    public Boolean getOrderExecutionFlag() {
+        return OrderExecutionFlag;
+    }
+
+    public void setOrderExecutionFlag(Boolean orderExecutionFlag) {
+        OrderExecutionFlag = orderExecutionFlag;
+    }
+
+    public Client getClients() {
+        return clients;
+    }
+
+    public void setClients(Client clients) {
+        this.clients = clients;
+    }
+
+    public Books getBooks() {
+        return books;
+    }
+
+    public void setBooks(Books books) {
+        this.books = books;
     }
 
     public void setOrder_Execution_Date(Date order_Execution_Date) {

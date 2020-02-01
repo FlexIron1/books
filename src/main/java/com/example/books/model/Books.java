@@ -7,6 +7,7 @@ import io.swagger.annotations.ApiModelProperty;
 import org.hibernate.annotations.NotFound;
 import org.hibernate.annotations.NotFoundAction;
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Date;
 import java.util.Set;
 
@@ -14,7 +15,7 @@ import java.util.Set;
 @Table(name = "book")
 @ApiModel(description = "Все подробности о книге")
 @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class)
-public class Books {
+public class Books implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -32,11 +33,8 @@ public class Books {
     @Column(name = "years")
     private int years;
     @ManyToMany(mappedBy = "booksList")
-    private Set<Author> authorList;
 
-    @NotFound(action = NotFoundAction.IGNORE)
-    @ManyToOne()
-    private Orders orders;
+    private Set<Author> authorList;
 
     public Books() {
     }
@@ -92,10 +90,4 @@ public class Books {
         return Id;
     }
 
-    public Orders getOrders() {
-        return orders;
-    }
-    public void setOrders(Orders orders) {
-        this.orders = orders;
-    }
 }
